@@ -83,7 +83,7 @@ module.exports.get = (event, context, callback) => {
 module.exports.list = (event, context, callback) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
-    ProjectionExpression: "id, creatureName"
+    ProjectionExpression: "id,creatureName"
   };
   // fetch all todos from the database
   dynamoDb.scan(params, (error, result) => {
