@@ -8,12 +8,12 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports.create = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
-  if (typeof data.text !== "string") {
+  if (typeof data.name !== "string") {
     console.error("Validation Failed");
     callback(null, {
       statusCode: 400,
       headers: { "Content-Type": "text/plain" },
-      body: "Couldn't create the todo item."
+      body: "Missing field 'name'."
     });
     return;
   }
@@ -22,10 +22,9 @@ module.exports.create = (event, context, callback) => {
     TableName: process.env.DYNAMODB_TABLE,
     Item: {
       id: uuid.v1(),
-      text: data.text,
-      checked: false,
-      createdAt: timestamp,
-      updatedAt: timestamp
+      creatureName: data.name,
+      creatureBody: data.body,
+      createdAt: timestamp
     }
   };
 
@@ -37,7 +36,7 @@ module.exports.create = (event, context, callback) => {
       callback(null, {
         statusCode: error.statusCode || 501,
         headers: { "Content-Type": "text/plain" },
-        body: "Couldn't create the todo item."
+        body: "Couldn't store creature data."
       });
       return;
     }
@@ -83,7 +82,8 @@ module.exports.get = (event, context, callback) => {
 
 module.exports.list = (event, context, callback) => {
   const params = {
-    TableName: process.env.DYNAMODB_TABLE
+    TableName: process.env.DYNAMODB_TABLE,
+    ProjectionExpression: "id, creatureName"
   };
   // fetch all todos from the database
   dynamoDb.scan(params, (error, result) => {
@@ -93,7 +93,7 @@ module.exports.list = (event, context, callback) => {
       callback(null, {
         statusCode: error.statusCode || 501,
         headers: { "Content-Type": "text/plain" },
-        body: "Couldn't fetch the todos."
+        body: "Couldn't fetch creatures."
       });
       return;
     }
