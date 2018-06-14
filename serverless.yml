@@ -17,6 +17,12 @@ provider:
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: ping
+          method: get
   create:
     handler: handler.create
     events:

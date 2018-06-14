@@ -5,6 +5,15 @@ const AWS = require("aws-sdk"); // eslint-disable-line import/no-extraneous-depe
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
+module.exports.hello = (event, context, callback) => {
+  const response = {
+    statusCode: 200,
+    body: "hi there"
+  };
+
+  callback(null, response);
+};
+
 module.exports.create = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
