@@ -8,7 +8,11 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports.hello = (event, context, callback) => {
   const response = {
     statusCode: 200,
-    body: "hi there"
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({ response: "hi there" })
   };
 
   callback(null, response);
@@ -53,6 +57,10 @@ module.exports.create = (event, context, callback) => {
     // create a response
     const response = {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true
+      },
       body: JSON.stringify(params.Item)
     };
     callback(null, response);
@@ -83,6 +91,10 @@ module.exports.get = (event, context, callback) => {
     // create a response
     const response = {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true
+      },
       body: JSON.stringify(result.Item)
     };
     callback(null, response);
@@ -110,6 +122,10 @@ module.exports.list = (event, context, callback) => {
     // create a response
     const response = {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true
+      },
       body: JSON.stringify(result.Items)
     };
     callback(null, response);
